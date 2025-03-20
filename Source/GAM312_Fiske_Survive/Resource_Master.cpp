@@ -15,7 +15,7 @@ AResource_Master::AResource_Master()
 	RootComponent = Mesh;
 
 	ResourceNameTxt->SetupAttachment(Mesh);
-	ResourceNameTxt->SetText(tempText);
+	
 
 
 }
@@ -26,6 +26,7 @@ void AResource_Master::BeginPlay()
 	Super::BeginPlay();
 	
 	tempText = tempText.FromString(ResourceName);
+	ResourceNameTxt->SetText(tempText);
 
 }
 

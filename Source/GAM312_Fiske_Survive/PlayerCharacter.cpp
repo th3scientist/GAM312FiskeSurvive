@@ -99,38 +99,46 @@ void APlayerCharacter::FindObject()
 		// check that the hit object is a resource object
 		AResource_Master* HitResource = Cast<AResource_Master>(HitResult.GetActor());
 
-		// is valid
-		if (HitResource)
+		// stamina check
+		if (Stamina > -StaminaLossOnResourceCollect)
 		{
-			FString hitName = HitResource->ResourceName;
-			int resourceValue = HitResource->ResourceAmount;
-
-			if (HitResource->TotalResource >= resourceValue)
+			// is valid
+			if (HitResource)
 			{
-				GiveResource(resourceValue, hitName);
-				// Subtract from total resource
-				HitResource->TotalResource = HitResource->TotalResource - resourceValue;
+				FString hitName = HitResource->ResourceName;
+				int resourceValue = HitResource->ResourceAmount;
+				SetStamina(StaminaLossOnResourceCollect);
+				
+				if (HitResource->TotalResource >= resourceValue)
+				{
+					GiveResource(resourceValue, hitName);
+					// Subtract from total resource
+					HitResource->TotalResource = HitResource->TotalResource - resourceValue;
 
-				check(GEngine != nullptr);
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Collected"));
+					check(GEngine != nullptr);
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Collected"));
 
-			}
-			// Gives the resources leftover when resourceValue is not a multiple of the total
-			else if (HitResource->TotalResource > 0.0f)
-			{
-				GiveResource(HitResource->TotalResource, hitName);
-				HitResource->Destroy();
+					UGameplayStatics::SpawnDecalAtLocation(GetWorld(), hitDecal,
+						FVector(10.0f, 10.0f, 10.0f), HitResult.Location, FRotator(-90, 0, 0), 2.0f);
 
-				check(GEngine != nullptr);
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Depleted"));
-			}
-			// Destroys resource for the case when resourceValue is a multiple of the total
-			if (HitResource->TotalResource == 0.0f)
-			{
-				HitResource->Destroy();
+				}
+				// Gives the resources leftover when resourceValue is not a multiple of the total
+				else if (HitResource->TotalResource > 0.0f)
+				{
+					GiveResource(HitResource->TotalResource, hitName);
+					HitResource->Destroy();
 
-				check(GEngine != nullptr);
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Depleted"));
+					check(GEngine != nullptr);
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Depleted"));
+				}
+				// Destroys resource for the case when resourceValue is a multiple of the total
+				if (HitResource->TotalResource == 0.0f)
+				{
+					HitResource->Destroy();
+
+					check(GEngine != nullptr);
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Depleted"));
+				}
 			}
 		}
 	}
@@ -138,25 +146,37 @@ void APlayerCharacter::FindObject()
 
 void APlayerCharacter::SetHealth(float amount)
 {
-	if (Health + amount <= MaxHealth)
+	if (Health + amount < MaxHealth)
 	{
 		Health = amount + Health;
+	}
+	else if (Health + amount >= MaxHealth)
+	{
+		Health = MaxHealth;
 	}
 }
 
 void APlayerCharacter::SetHunger(float amount)
 {
-	if (Hunger + amount <= 100)
+	if (Hunger + amount < 100)
 	{
 		Hunger = amount + Hunger;
+	}
+	else if (Hunger + amount >= 100)
+	{
+		Hunger = 100;
 	}
 }
 
 void APlayerCharacter::SetStamina(float amount)
 {
-	if (Stamina + amount <= MaxStamina)
+	if (Stamina + amount < MaxStamina)
 	{
 		Stamina = amount + Stamina;
+	}
+	else if (Stamina + amount >= MaxStamina)
+	{
+		Stamina = MaxStamina;
 	}
 }
 
