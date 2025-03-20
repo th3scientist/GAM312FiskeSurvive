@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
+#include "Resource_Master.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -48,7 +49,72 @@ public:
 	UFUNCTION()
 	void Interact();
 
+	UFUNCTION()
+	void FindObject();
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* PlayerCamComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStats")
+	float Health = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStats")
+	float Hunger = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStats")
+	float Stamina = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStats")
+	float MaxHealth = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStats")
+	float MaxStamina = 100.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStats")
+	float HealthLossFromStarvation = -3.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStats")
+	float HungerLossRate = -1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStats")
+	float StaminaRegenRate = 10.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Resources")
+	int Wood;
+
+	UPROPERTY(EditAnywhere, Category = "Resources")
+	int Stone;
+	
+	UPROPERTY(EditAnywhere, Category = "Resources")
+	int Berry;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
+	TArray<int> ResourcesArray;
+
+	UPROPERTY(EditAnywhere, Category = "Resources")
+	TArray<FString> ResourcesNameArray;
+
+	UFUNCTION(BlueprintCallable)
+	void SetHealth(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetHunger(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetStamina(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetMaxHealth(float amount);
+
+	UFUNCTION(BlueprintCallable)
+	void SetMaxStamina(float amount);
+
+	UFUNCTION()
+	void DecreaseStats();
+
+	UFUNCTION()
+	void GiveResource(float amount, FString resourceType);
+
+
 
 };
