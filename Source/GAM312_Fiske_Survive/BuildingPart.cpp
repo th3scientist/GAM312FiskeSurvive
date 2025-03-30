@@ -1,37 +1,32 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Resource_Master.h"
+#include "BuildingPart.h"
 
 // Sets default values
-AResource_Master::AResource_Master()
+ABuildingPart::ABuildingPart()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	ResourceNameTxt = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Text Render"));
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	PivotArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Pivot Arrow"));
 
-	RootComponent = Mesh;
-
-	ResourceNameTxt->SetupAttachment(Mesh);
-	
+	RootComponent = PivotArrow;
+	Mesh->SetupAttachment(PivotArrow);
 
 
 }
 
 // Called when the game starts or when spawned
-void AResource_Master::BeginPlay()
+void ABuildingPart::BeginPlay()
 {
 	Super::BeginPlay();
-	// Set resource name on text render
-	tempText = tempText.FromString(ResourceName);
-	ResourceNameTxt->SetText(tempText);
-
+	
 }
 
 // Called every frame
-void AResource_Master::Tick(float DeltaTime)
+void ABuildingPart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
