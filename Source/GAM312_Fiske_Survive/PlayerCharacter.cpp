@@ -117,7 +117,7 @@ void APlayerCharacter::FindObject()
 			AResource_Master* HitResource = Cast<AResource_Master>(HitResult.GetActor());
 
 			// stamina check
-			if (Stamina > -StaminaLossOnResourceCollect)
+			if (Stamina > 0)
 			{
 				// is valid
 				if (HitResource)
@@ -134,7 +134,7 @@ void APlayerCharacter::FindObject()
 						HitResource->TotalResource = HitResource->TotalResource - resourceValue;
 
 						check(GEngine != nullptr);
-						GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Collected"));
+						GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Resource Collected"));
 
 						UGameplayStatics::SpawnDecalAtLocation(GetWorld(), hitDecal,
 							FVector(10.0f, 10.0f, 10.0f), HitResult.Location, FRotator(-90, 0, 0), 2.0f);
