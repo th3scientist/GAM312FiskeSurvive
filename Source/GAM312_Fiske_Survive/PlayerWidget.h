@@ -13,5 +13,9 @@ UCLASS()
 class GAM312_FISKE_SURVIVE_API UPlayerWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateBars(float Health1, float Hunger1, float Stamina1);
 	
 };
