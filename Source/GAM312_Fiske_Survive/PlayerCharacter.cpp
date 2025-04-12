@@ -26,6 +26,12 @@ void APlayerCharacter::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(StatsTimerHandle, this, &APlayerCharacter::DecreaseStats, 2.0f, true);
 	ResourcesArray = { 0, 0, 0 };
 	ResourcesNameArray = { "Wood", "Stone", "Berry" };
+
+	if (objWidget)
+	{
+		objWidget->UpdateBuildObj(0.0f);
+		objWidget->Updatematobj(0.0f);
+	}
 }
 
 // Called every frame
@@ -164,6 +170,8 @@ void APlayerCharacter::FindObject()
 	else 
 	{
 		isBuilding = false;
+		objectsBuilt = objectsBuilt + 1.0f;
+		objWidget->UpdateBuildObj(objectsBuilt);
 	}
 }
 
@@ -243,6 +251,9 @@ void APlayerCharacter::GiveResource(float amount, FString resourceType)
 	{
 		ResourcesArray[2] = ResourcesArray[2] + amount;
 	}
+
+	matsCollected = matsCollected + amount;
+	objWidget->Updatematobj(matsCollected);
 }
 
 void APlayerCharacter::UpdateResources(float woodAmount, float stoneAmount, FString buildingObject)
