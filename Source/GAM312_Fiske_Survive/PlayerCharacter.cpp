@@ -104,8 +104,10 @@ void APlayerCharacter::Interact()
 
 void APlayerCharacter::FindObject()
 {
+	// The following code uses the camera's location to find a forward vector where the line trace is later performed
 	FHitResult HitResult;
 	FVector StartLocation = PlayerCamComp->GetComponentLocation();
+	// The 800.0f multiplier means the line trace is performed over 800 units directly in front of the camera location
 	FVector Direction = PlayerCamComp->GetForwardVector() * 800.0f;
 	FVector EndLocation = StartLocation + Direction;
 
@@ -116,7 +118,7 @@ void APlayerCharacter::FindObject()
 
 	if (!isBuilding)
 	{
-		// perform the line trace
+		// perform the line trace using the vectors found previously
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility, QueryParams))
 		{
 			// check that the hit object is a resource object
@@ -125,7 +127,7 @@ void APlayerCharacter::FindObject()
 			// stamina check
 			if (Stamina > 0)
 			{
-				// is valid
+				// check that the hitresource is valid
 				if (HitResource)
 				{
 					FString hitName = HitResource->ResourceName;
